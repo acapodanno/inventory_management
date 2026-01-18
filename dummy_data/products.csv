@@ -1,0 +1,21 @@
+productCode,name,category,initialStock,reorderPoint,unitOfMeasure,status
+P001,Mechanical Keyboard,Hardware,0,30,pcs,ACTIVE
+P002,Wireless Mouse,Hardware,84,25,pcs,ACTIVE
+P003,USB-C Cable 1m,Accessories,300,60,pcs,ACTIVE
+P004,USB-C Cable 2m,Accessories,180,50,pcs,ACTIVE
+P005,27inch Monitor,Hardware,40,10,pcs,ACTIVE
+P006,Laptop Stand Aluminum,Accessories,75,20,pcs,ACTIVE
+P007,Notebook A4,Stationery,250,50,pcs,ACTIVE
+P008,Blue Ballpoint Pen,Stationery,500,100,pcs,ACTIVE
+P009,Office Chair,Office,15,5,pcs,ACTIVE
+P010,Desk Lamp LED,Office,28,10,pcs,ACTIVE
+P011,External SSD 1TB,Hardware,22,10,pcs,ACTIVE
+P012,HDMI Cable,Accessories,0,30,pcs,INACTIVE
+P013,Printer Paper A4,Stationery,400,80,pcs,ACTIVE
+P014,Webcam HD,Hardware,18,10,pcs,ACTIVE
+P015,Headphones Wireless,Hardware,55,20,pcs,ACTIVE
+P016,Smartphone Stand,Accessories,95,25,pcs,ACTIVE
+P017,Whiteboard Marker,Stationery,60,40,pcs,ACTIVE
+P018,Router WiFi,Hardware,12,8,pcs,ACTIVE
+P019,Power Strip 6 sockets,Office,33,15,pcs,ACTIVE
+P020,Desk Organizer,Office,70,20,pcs,ACTIVE
