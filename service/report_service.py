@@ -18,8 +18,8 @@ class ReportService:
         report = DailyReportModel(0,0,0,[])
         daily_orders = [order for order in orders.values() if datetime.strptime(order.orderDate, '%Y-%m-%d').date() == today]
         report.numberOrders = len(daily_orders)
-        report.numberOrderCompleted = sum(1 for daily_order in daily_orders if daily_order.status == OrderStatus.COMPLETED)
-        report.numberOrderPending = sum(1 for daily_order in daily_orders if daily_order.status == OrderStatus.PENDING)
+        report.numberOrderCompleted = self._sum_order_for_status(daily_orders, OrderStatus.COMPLETED)
+        report.numberOrderPending = self._sum_order_for_status(daily_orders, OrderStatus.PENDING)
         product_fulfillment = {}
         daily_order_ids = {order.orderId for order in daily_orders}
         order_products_result = [order_product for order_product in order_products.values() if order_product.orderId in daily_order_ids ]
@@ -30,3 +30,6 @@ class ReportService:
         most_fulfilled_products = sorted(product_fulfillment.items())[:5]
         report.productsMostFulfilled = [(products[code].name, qty) for code, qty in most_fulfilled_products if code in products]
         return report
+    
+    def _sum_order_for_status(self, orders, status):
+        return sum(1 for order in orders if order.status == status)
