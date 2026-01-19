@@ -19,22 +19,17 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(root)
         self.tabs = QTabWidget()
         main_layout.addWidget(self.tabs)
-        products_tab = QWidget()
-        products_layout = QVBoxLayout(products_tab)
         self.product_ui = ProductUI(product_service)
-        products_layout.addWidget(self.product_ui)
-        
-        orders_tab = QWidget()
-        orders_layout = QVBoxLayout(orders_tab)
         self.order_ui = OrderUI(send_order, order_service, order_product_service)
-        orders_layout.addWidget(self.order_ui)        
-        reports_tab = QWidget()
-        reports_layout = QVBoxLayout(reports_tab)
         self.report_ui = ReportUI(report_service)
-        reports_layout.addWidget(self.report_ui)
-        self.tabs.addTab(orders_tab, "Orders")
-        self.tabs.addTab(products_tab, "Products")
-        self.tabs.addTab(reports_tab, "Reports")
+        products_tab = self._create_tab_widget(self.product_ui)
+        orders_tab = self._create_tab_widget(self.order_ui)
+        reports_tab = self._create_tab_widget(self.report_ui)
+        self._add_tab([
+            (orders_tab, "Orders"),
+            (products_tab, "Products"),
+            (reports_tab, "Reports")
+        ])
         self.tabs.currentChanged.connect(self._on_tab_changed)
 
     def _on_tab_changed(self, index):
@@ -42,3 +37,13 @@ class MainWindow(QMainWindow):
             self.product_ui.reload_data()
         elif index == 1:
             self.order_ui.reload_orders()
+
+    def _create_tab_widget(self, widget):
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+        layout.addWidget(widget)
+        return tab
+    
+    def _add_tab(self, widgets):
+        for widget, title in widgets:
+            self.tabs.addTab(widget, title)

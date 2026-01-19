@@ -1,13 +1,16 @@
 from constant.order_status import OrderStatus
 from datetime import datetime
 from model.daily_report_model import DailyReportModel
+import logging
 class ReportService:
     def __init__(self, order_service, product_service,order_product_service):
         self.order_service = order_service
         self.product_service = product_service
         self.order_product_service = order_product_service
+        self.logger = logging.getLogger(__name__)
 
     def generated_daily_report(self):
+        self.logger.info("Generating daily report.")
         orders = self.order_service.get_all_orders()
         products = self.product_service.get_all_products()
         order_products = self.order_product_service.get_all_order_products()

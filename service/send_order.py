@@ -15,7 +15,7 @@ class SendOrder:
         self.logger = logging.getLogger(__name__)
     
     def send_order(self, order, product_lines):
-        logging.info(f"Processing order {order.orderId} with product lines: {product_lines}")
+        self.logger.info(f"Processing order {order.orderId} with product lines: {product_lines}")
         order_products = []
         for line in product_lines:
             productCode = line['productCode']

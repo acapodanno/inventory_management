@@ -1,8 +1,9 @@
 import logging
 class ProductService:
-    logger = logging.getLogger(__name__)
     def __init__(self, repository):
         self.repository = repository
+        self.logger = logging.getLogger(__name__)
+
 
     def get_all_products(self):
         self.logger.info("Fetching all products")
