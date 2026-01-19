@@ -13,11 +13,14 @@ class ReportService:
         order_products = self.order_product_service.get_all_order_products()
         today = datetime.now().date()
         report = DailyReportModel(0,0,0,[])
-        report.numberOrders = len(orders)
-        report.numberOrderCompleted = sum(1 for order in orders.values() if order.status == OrderStatus.COMPLETED and datetime.strptime(order.orderDate, '%Y-%m-%d').date() == today)
-        report.numberOrderPending = sum(1 for order in orders.values() if order.status == OrderStatus.PENDING and datetime.strptime(order.orderDate, '%Y-%m-%d').date() == today)
+        daily_orders = [order for order in orders.values() if datetime.strptime(order.orderDate, '%Y-%m-%d').date() == today]
+        report.numberOrders = len(daily_orders)
+        report.numberOrderCompleted = sum(1 for daily_order in daily_orders if daily_order.status == OrderStatus.COMPLETED)
+        report.numberOrderPending = sum(1 for daily_order in daily_orders if daily_order.status == OrderStatus.PENDING)
         product_fulfillment = {}
-        for op in order_products.values():
+        daily_order_ids = {order.orderId for order in daily_orders}
+        order_products_result = [order_product for order_product in order_products.values() if order_product.orderId in daily_order_ids ]
+        for op in order_products_result:
             if op.productCode not in product_fulfillment:
                 product_fulfillment[op.productCode] = 0
             product_fulfillment[op.productCode] += int(op.quantityFulfilled)

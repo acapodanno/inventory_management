@@ -5,7 +5,7 @@ from service.product_service import ProductService
 from service.order_service import OrderService
 from repository.order_repository import OrderRepository
 from repository.product_repository import ProductRepository
-from business.send_order import SendOrder
+from service.send_order import SendOrder
 from service.order_product_service import OrderProductService
 from repository.order_product_repository import OrderProductRepository
 from logs.logging_config import setup_logging
