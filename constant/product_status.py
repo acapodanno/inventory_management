@@ -1,3 +1,4 @@
 class ProductStatus:
     ACTIVE = "ACTIVE"
     INACTIVE = "INACTIVE"
+    REORDERING = "REORDERING"
