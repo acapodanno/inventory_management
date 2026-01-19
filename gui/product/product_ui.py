@@ -48,7 +48,6 @@ class ProductUI(QWidget):
         self.reload_data()
 
     def reload_data(self):
-        """Ricarica dal service e aggiorna categorie + tabella."""
         self.products = self.product_service.get_all_products() 
         self._reload_categories()
         self.render_table(self.products.values())

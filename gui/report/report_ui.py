@@ -13,7 +13,6 @@ class ReportUI(QWidget):
         root = QVBoxLayout(self)
         header = QHBoxLayout()
         self.title = QLabel("Daily Report")
-        self.title.setStyleSheet("font-size: 18px; font-weight: bold;")
         header.addWidget(self.title)
 
         header.addStretch(1)
@@ -72,3 +71,9 @@ class ReportUI(QWidget):
 
         self.products_table.setSortingEnabled(True)
         self.products_table.resizeColumnsToContents()
+
+    def reset_ui(self):
+        self.total_orders_lbl.setText("Total orders: 0")
+        self.completed_orders_lbl.setText("Completed: 0")
+        self.pending_orders_lbl.setText("Pending: 0")
+        self.products_table.setRowCount(0)

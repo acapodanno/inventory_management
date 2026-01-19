@@ -16,6 +16,7 @@ class ProductService:
     def add_product(self, product):
         self.logger.info(f"Adding new product: {product}")
         return self.repository.save(product)
+    
     def update_product(self, product):
         self.logger.info(f"Updating product: {product}")
         return self.repository.update(product)

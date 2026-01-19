@@ -37,6 +37,8 @@ class MainWindow(QMainWindow):
             self.product_ui.reload_data()
         elif index == 1:
             self.order_ui.reload_orders()
+        elif index == 2:
+            self.report_ui.reset_ui()
 
     def _create_tab_widget(self, widget):
         tab = QWidget()
