@@ -51,6 +51,9 @@ class SendOrder:
             )
             self.order_product_service.add_order_product(order_product)
             product.initialStock -= quantity
+            if product.initialStock <= product.pointReorder:
+                restock_quantity = product.maxStock - product.initialStock
+                self._reorder_stock_to_supplier(productCode, restock_quantity)
             self.product_service.update_product(product)
             return order_product
         elif product and product.status == ProductStatus.ACTIVE and 0 < product.initialStock < quantity:
@@ -63,6 +66,7 @@ class SendOrder:
             )
             self.order_product_service.add_order_product(order_product)
             product.initialStock = 0
+            self._reorder_stock_to_supplier(productCode, product.maxStock)
             self.product_service.update_product(product)
             return order_product
         else:
@@ -75,3 +79,7 @@ class SendOrder:
             )
             self.order_product_service.add_order_product(order_product)
             return order_product
+    
+    def _reorder_stock_to_supplier(self, productCode, quantity):
+        self.logger.info(f"Reordering {quantity} of product {productCode} from supplier.")
+        return True
