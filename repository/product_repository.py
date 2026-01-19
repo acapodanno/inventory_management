@@ -10,8 +10,8 @@ class ProductRepository:
             next(file)
             for line in file:
                 parts = line.strip().split(',')
-                if len(parts) == 7:
-                    productCode, name, category, initialStock, reorderPoint, unitOfMeasure, status = parts
+                if len(parts) == 8:
+                    productCode, name, category, initialStock, reorderPoint, unitOfMeasure, status, maxStock = parts
                     products[productCode] = ProductModel(
                         productCode,
                         name,
@@ -19,7 +19,8 @@ class ProductRepository:
                         int(initialStock),
                         int(reorderPoint),
                         unitOfMeasure,
-                        status
+                        status,
+                        int(maxStock)
                     )
         return products
     
