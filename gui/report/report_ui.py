@@ -3,7 +3,7 @@ from PySide6.QtWidgets import (
     QLabel, QPushButton, QTableWidget, QTableWidgetItem, QGroupBox
 )
 from PySide6.QtCore import Qt
-
+from util.generate_excel import generate_excel
 
 class ReportUI(QWidget):
     def __init__(self, report_service, parent=None):
@@ -16,10 +16,11 @@ class ReportUI(QWidget):
         header.addWidget(self.title)
 
         header.addStretch(1)
+        self.generate_excel_btn = QPushButton("Generate Excel Report")
 
         self.generate_btn = QPushButton("Generate today report")
         header.addWidget(self.generate_btn)
-
+        header.addWidget(self.generate_excel_btn)
         root.addLayout(header)
 
         kpi_box = QGroupBox("Summary")
@@ -51,8 +52,16 @@ class ReportUI(QWidget):
 
 
         self.generate_btn.clicked.connect(self.generate_report)
+        self.generate_excel_btn.clicked.connect(self.generate_excel_report)
 
-
+    def generate_excel_report(self):
+        report = self.report_service.generated_daily_report()
+        generate_excel({
+            "dailyReport": [report.numberOrders,
+                            report.numberOrderCompleted,
+                            report.numberOrderPending],
+            "productsMostFulfilled": report.productsMostFulfilled
+        }, "daily_report.xls")
     def generate_report(self):
         report = self.report_service.generated_daily_report()
         self.total_orders_lbl.setText(f"Total orders: {report.numberOrders}")

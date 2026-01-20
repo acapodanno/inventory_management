@@ -10,6 +10,7 @@ from service.order_product_service import OrderProductService
 from repository.order_product_repository import OrderProductRepository
 from logs.logging_config import setup_logging
 from service.report_service import ReportService    
+from util.generate_excel import generate_excel
 def main():
     setup_logging()
     productService = ProductService(ProductRepository('dummy_data/products.csv'))
@@ -17,7 +18,13 @@ def main():
     orderProductService = OrderProductService(OrderProductRepository('dummy_data/order_products.csv'))
     sendOrderService = SendOrder(orderService, orderProductService, productService)
     reportService = ReportService(orderService, productService, orderProductService)
-    print(reportService.generated_daily_report())
+    daily_report=reportService.generated_daily_report()
+    generate_excel({
+        "dailyReport": [daily_report.numberOrders,
+                        daily_report.numberOrderCompleted,
+                        daily_report.numberOrderPending],
+        "productsMostFulfilled": daily_report.productsMostFulfilled
+    }, "daily_report.xls")
     #sys.exit(app.exec())
 
 
