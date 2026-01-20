@@ -8,7 +8,7 @@ from repository.product_repository import ProductRepository
 from service.send_order import SendOrder
 from service.order_product_service import OrderProductService
 from repository.order_product_repository import OrderProductRepository
-from logs.logging_config import setup_logging
+from util.logging_config import setup_logging
 from service.report_service import ReportService    
 from util.generate_excel import generate_excel
 def main():
