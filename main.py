@@ -1,6 +1,3 @@
-import sys
-from PySide6.QtWidgets import QApplication
-from gui.main_window import MainWindow
 from service.product_service import ProductService
 from service.order_service import OrderService
 from repository.order_repository import OrderRepository
@@ -25,8 +22,6 @@ def main():
                         daily_report.numberOrderPending],
         "productsMostFulfilled": daily_report.productsMostFulfilled
     }, "daily_report.xls")
-    #sys.exit(app.exec())
-
 
 
 if __name__ == "__main__":

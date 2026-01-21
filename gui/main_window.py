@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
     def __init__(self,product_service, order_service, send_order, order_product_service, report_service, parent=None):
         super().__init__()
         load_dotenv()
-        title = os.environ.get("title")
+        title = os.environ.get("TITLE")
         self.setWindowTitle(title)
         self.resize(900, 600)
         root = QWidget()
