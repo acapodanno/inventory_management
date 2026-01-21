@@ -1,5 +1,5 @@
 productCode,name,category,initialStock,reorderPoint,unitOfMeasure,status,maxStock
-P001,Mechanical Keyboard,Hardware,0,30,pcs,ACTIVE,100
+P001,Mechanical Keyboard,Hardware,100,30,pcs,ACTIVE,100
 P002,Wireless Mouse,Hardware,84,25,pcs,ACTIVE,150
 P003,USB-C Cable 1m,Accessories,300,60,pcs,ACTIVE,500
 P004,USB-C Cable 2m,Accessories,180,50,pcs,ACTIVE,350
@@ -10,7 +10,7 @@ P008,Blue Ballpoint Pen,Stationery,500,100,pcs,ACTIVE,500
 P009,Office Chair,Office,15,5,pcs,ACTIVE,30
 P010,Desk Lamp LED,Office,28,10,pcs,ACTIVE,30
 P011,External SSD 1TB,Hardware,22,10,pcs,ACTIVE,30
-P012,HDMI Cable,Accessories,0,30,pcs,INACTIVE,30
+P012,HDMI Cable,Accessories,25,30,pcs,INACTIVE,30
 P013,Printer Paper A4,Stationery,400,80,pcs,ACTIVE,400
 P014,Webcam HD,Hardware,18,10,pcs,ACTIVE,20
 P015,Headphones Wireless,Hardware,55,20,pcs,ACTIVE,60
