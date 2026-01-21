@@ -40,45 +40,39 @@ class SendOrder:
         if not product:
             self.logger.warning(f"Product {productCode} not found.")
             raise Exception(f"Product not found.")
-        if product and product.status == ProductStatus.ACTIVE and product.initialStock >= quantity:
-            order_product = OrderProductModel(
-                orderId=orderId,
-                productCode=productCode,
-                quantityOrdered=quantity,
-                quantityFulfilled=quantity,
-                status= OrderProductStatus.FULFILLED
-            )
-            self.order_product_service.add_order_product(order_product)
-            product.initialStock -= quantity
-            if product.initialStock <= product.pointReorder:
-                restock_quantity = product.maxStock - product.initialStock
-                self._reorder_stock_to_supplier(productCode, restock_quantity)
-            self.product_service.update_product(product)
-            return order_product
-        elif product and product.status == ProductStatus.ACTIVE and 0 < product.initialStock < quantity:
-            order_product = OrderProductModel(
-                orderId=orderId,
-                productCode=productCode,
-                quantityOrdered=quantity,
-                quantityFulfilled=product.initialStock,
-                status=OrderProductStatus.PARTIALLY_FULFILLED
-            )
-            self.order_product_service.add_order_product(order_product)
-            product.initialStock = 0
-            self._reorder_stock_to_supplier(productCode, product.maxStock,product)
-            self.product_service.update_product(product)
-            return order_product
+        if ProductStatus.INACTIVE == product.status:
+            self.logger.warning(f"Product {productCode} is inactive.")
+            raise Exception(f"Product is inactive.")
+        
+        available = product.initialStock
+        fulfilled = min(available, quantity)
+
+        if fulfilled == 0:
+            status = OrderProductStatus.UNFULFILLED
+        elif fulfilled < quantity:
+            status = OrderProductStatus.PARTIALLY_FULFILLED
         else:
-            order_product = OrderProductModel(
-                orderId=orderId,
-                productCode=productCode,
-                quantityOrdered=quantity,
-                quantityFulfilled=0,
-                status=OrderProductStatus.UNFULFILLED
-            )
-            self.order_product_service.add_order_product(order_product)
+            status = OrderProductStatus.FULFILLED
+
+        order_product = OrderProductModel(
+            orderId=orderId,
+            productCode=productCode,
+            quantityOrdered=quantity,
+            quantityFulfilled=fulfilled,
+            status=status
+        )
+        self.order_product_service.add_order_product(order_product)
+        if fulfilled > 0:
+            product.initialStock -= fulfilled
+        if product.initialStock <= product.pointReorder and product.status != ProductStatus.REORDERING:
+            restock_quantity = product.maxStock - product.initialStock
+            self.product_service.update_product(product)
+            self._reorder_stock_to_supplier(productCode, restock_quantity)
             return order_product
-    
+
+        self.product_service.update_product(product)
+        return order_product    
+            
     def _reorder_stock_to_supplier(self, productCode, quantity,product):
         self.logger.info(f"Reordering {quantity} of product {productCode} from supplier.")
         product.status=ProductStatus.REORDERING
