@@ -401,3 +401,8 @@ timestamp,level,name,message
 2026-01-21 21:41:02,INFO,service.product_service,Fetching all products
 2026-01-21 21:41:02,INFO,service.order_service,Fetching all orders
 2026-01-21 21:41:04,INFO,service.product_service,Fetching all products
+2026-01-21 21:55:35,INFO,service.product_service,Fetching all products
+2026-01-21 21:55:35,INFO,service.order_service,Fetching all orders
+2026-01-21 21:56:20,INFO,service.order_service,Fetching all orders
+2026-01-21 21:56:24,INFO,service.product_service,Fetching all products
+2026-01-21 21:56:31,INFO,service.product_service,Fetching all products

@@ -43,7 +43,6 @@ class ProductRepository:
         products = self.find_all()
         products[product.productCode] = product
         with open(self.path, 'w') as file:
-            file.write("productCode,name,category,initialStock,reorderPoint,unitOfMeasure,status\n")  # Write header
             for p in products.values():
-                line = f"{p.productCode},{p.name},{p.category},{p.initialStock},{p.reorderPoint},{p.unitOfMeasure},{p.status}\n"
+                line = f"{p.productCode},{p.name},{p.category},{p.initialStock},{p.reorderPoint},{p.unitOfMeasure},{p.status},{p.maxStock}\n"
                 file.write(line)
