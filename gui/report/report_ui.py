@@ -6,19 +6,21 @@ from PySide6.QtCore import Qt
 from util.generate_excel import generate_excel
 
 class ReportUI(QWidget):
+    _header_title = "Daily Report"
+    _btn_generate_excel_title = "Generate Excel Report"
+    _btn_generate_report_title = "Generate today report"
     def __init__(self, report_service, parent=None):
         super().__init__(parent)
         self.report_service = report_service
 
         root = QVBoxLayout(self)
         header = QHBoxLayout()
-        self.title = QLabel("Daily Report")
+        self.title = QLabel(self._header_title)
         header.addWidget(self.title)
 
         header.addStretch(1)
-        self.generate_excel_btn = QPushButton("Generate Excel Report")
-
-        self.generate_btn = QPushButton("Generate today report")
+        self.generate_excel_btn = QPushButton(self._btn_generate_excel_title)
+        self.generate_btn = QPushButton(self._btn_generate_report_title)
         header.addWidget(self.generate_btn)
         header.addWidget(self.generate_excel_btn)
         root.addLayout(header)
@@ -32,7 +34,6 @@ class ReportUI(QWidget):
 
         for lbl in (self.total_orders_lbl, self.completed_orders_lbl, self.pending_orders_lbl):
             lbl.setAlignment(Qt.AlignCenter)
-            lbl.setStyleSheet("font-size: 14px;")
 
         kpi_layout.addWidget(self.total_orders_lbl)
         kpi_layout.addWidget(self.completed_orders_lbl)
@@ -51,10 +52,10 @@ class ReportUI(QWidget):
         root.addWidget(table_box)
 
 
-        self.generate_btn.clicked.connect(self.generate_report)
-        self.generate_excel_btn.clicked.connect(self.generate_excel_report)
+        self.generate_btn.clicked.connect(self._generate_report)
+        self.generate_excel_btn.clicked.connect(self._generate_excel_report)
 
-    def generate_excel_report(self):
+    def _generate_excel_report(self):
         report = self.report_service.generated_daily_report()
         generate_excel({
             "dailyReport": [report.numberOrders,
@@ -62,14 +63,14 @@ class ReportUI(QWidget):
                             report.numberOrderPending],
             "productsMostFulfilled": report.productsMostFulfilled
         }, "daily_report.xls")
-    def generate_report(self):
+    def _generate_report(self):
         report = self.report_service.generated_daily_report()
         self.total_orders_lbl.setText(f"Total orders: {report.numberOrders}")
         self.completed_orders_lbl.setText(f"Completed: {report.numberOrderCompleted}")
         self.pending_orders_lbl.setText(f"Pending: {report.numberOrderPending}")
 
-        self.render_products(report.productsMostFulfilled)
-    def render_products(self, products):
+        self._render_products(report.productsMostFulfilled)
+    def _render_products(self, products):
         self.products_table.setSortingEnabled(False)
         self.products_table.clearContents()
         self.products_table.setRowCount(len(products))

@@ -1,7 +1,6 @@
 from service.order_service import OrderService
 from service.order_product_service import OrderProductService
 from service.product_service import ProductService
-import uuid
 from model.order_product_model import OrderProductModel
 import logging
 from constant.order_product_status import OrderProductStatus
@@ -66,7 +65,7 @@ class SendOrder:
             )
             self.order_product_service.add_order_product(order_product)
             product.initialStock = 0
-            self._reorder_stock_to_supplier(productCode, product.maxStock)
+            self._reorder_stock_to_supplier(productCode, product.maxStock,product)
             self.product_service.update_product(product)
             return order_product
         else:
@@ -80,6 +79,8 @@ class SendOrder:
             self.order_product_service.add_order_product(order_product)
             return order_product
     
-    def _reorder_stock_to_supplier(self, productCode, quantity):
+    def _reorder_stock_to_supplier(self, productCode, quantity,product):
         self.logger.info(f"Reordering {quantity} of product {productCode} from supplier.")
+        product.status=ProductStatus.REORDERING
+        self.product_service.update_product(product)
         return True

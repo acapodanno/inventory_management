@@ -387,3 +387,12 @@ timestamp,level,name,message
 2026-01-20 13:00:50,INFO,service.order_service,Fetching all orders
 2026-01-20 13:00:51,INFO,service.order_service,Fetching all orders
 2026-01-20 13:00:52,INFO,service.product_service,Fetching all products
+2026-01-21 10:40:37,INFO,service.product_service,Fetching all products
+2026-01-21 10:40:37,INFO,service.order_service,Fetching all orders
+2026-01-21 10:40:50,INFO,service.order_service,Fetching all orders
+2026-01-21 10:41:00,INFO,service.order_service,Fetching all orders
+2026-01-21 10:41:01,INFO,service.product_service,Fetching all products
+2026-01-21 10:41:27,INFO,service.order_service,Fetching all orders
+2026-01-21 10:41:29,INFO,service.order_service,Fetching all orders
+2026-01-21 10:41:31,INFO,service.product_service,Fetching all products
+2026-01-21 11:30:38,INFO,service.order_service,Fetching all orders
