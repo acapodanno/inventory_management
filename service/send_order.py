@@ -64,10 +64,10 @@ class SendOrder:
         self.order_product_service.add_order_product(order_product)
         if fulfilled > 0:
             product.initialStock -= fulfilled
-        if product.initialStock <= product.pointReorder and product.status != ProductStatus.REORDERING:
+        if product.initialStock <= product.reorderPoint and product.status != ProductStatus.REORDERING:
             restock_quantity = product.maxStock - product.initialStock
             self.product_service.update_product(product)
-            self._reorder_stock_to_supplier(productCode, restock_quantity)
+            self._reorder_stock_to_supplier(productCode, restock_quantity,product)
             return order_product
 
         self.product_service.update_product(product)

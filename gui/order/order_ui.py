@@ -1,8 +1,15 @@
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QSpinBox, QPushButton, QLabel,
-    QTableWidget, QTableWidgetItem, QGroupBox,QDialog,QDialogButtonBox
+    QTableWidget, QTableWidgetItem, QGroupBox
 )
+
+from model.order_model import OrderModel
+from gui.shared.custom_popup.custom_popup import CustomPopup
+from gui.shared.custom_popup.custom_popop_level import CustomPopupLevel
+import uuid
+from util.validate_date import validate_date
+from datetime import datetime
 class OrderUI(QWidget):
     def __init__(self, send_order, order_service, order_product_service, parent=None):
         super().__init__(parent)
@@ -23,6 +30,7 @@ class OrderUI(QWidget):
         fields.addRow("Customer ID:", self.customer_input)
 
         self.date_input = QLineEdit()
+        self.date_input.setText(datetime.today().strftime("%Y-%m-%d"))        
         self.date_input.setPlaceholderText("YYYY-MM-DD")
         fields.addRow("Order Date:", self.date_input)
 
@@ -72,17 +80,16 @@ class OrderUI(QWidget):
 
         root.addWidget(items_box)
 
-        self.add_line_btn.clicked.connect(self.add_empty_line)
+        self.add_line_btn.clicked.connect(self._add_empty_line)
         self.remove_line_btn.clicked.connect(self.remove_selected_line)
-        self.create_order_btn.clicked.connect(self.on_send_order)
+        self.create_order_btn.clicked.connect(self._on_send_order)
 
         self.refresh_orders_btn.clicked.connect(self.reload_orders)
-        self.orders_table.itemSelectionChanged.connect(self.on_order_selected)
+        self.orders_table.itemSelectionChanged.connect(self._on_order_selected)
 
-        self.add_empty_line()
         self.reload_orders()
-
-    def add_empty_line(self):
+        
+    def _add_empty_line(self):
         r = self.lines_table.rowCount()
         self.lines_table.insertRow(r)
         self.lines_table.setItem(r, 0, QTableWidgetItem(""))  # productCode
@@ -117,18 +124,25 @@ class OrderUI(QWidget):
 
         return lines
 
-    def on_send_order(self):
+    def _on_send_order(self):
         customer_id = self.customer_input.text().strip()
         order_date = self.date_input.text().strip()
         priority = int(self.priority_input.value())
         product_lines = self._read_lines()
 
-        if not customer_id or not order_date or not product_lines:
+        if not customer_id:
+            dlg = CustomPopup(CustomPopupLevel.WARNING,"Customer ID is not must empty!")
+            dlg.exec()
             return
-
-        from model.order_model import OrderModel
-        import uuid
-
+        elif not order_date and validate_date(order_date): 
+            dlg = CustomPopup(CustomPopupLevel.WARNING,"Order Date is not must empty!")
+            dlg.exec()
+            return
+        elif not product_lines:
+            dlg = CustomPopup(CustomPopupLevel.WARNING,"Product Line is not must empty!")
+            dlg.exec()
+            return
+        
         order = OrderModel(
             orderId=uuid.uuid4().__str__(),
             userId=customer_id,
@@ -139,15 +153,12 @@ class OrderUI(QWidget):
         try:
             self.send_order.send_order(order, product_lines)
             self.reload_orders()
+            print(f"Send Order Success:{order}")
+            dlg = CustomPopup(CustomPopupLevel.INFO,f"Success Send Order with id: {order.orderId}")
+            dlg.exec()
         except Exception as e:
             print(f"Error sending order: {str(e)}")
-            dlg = QDialog(self)
-            dlg.setWindowTitle("Error")
-            dlg_layout = QVBoxLayout(dlg)
-            dlg_layout.addWidget(QLabel(f"Failed to send order: {str(e)}"))
-            btns = QDialogButtonBox(QDialogButtonBox.Ok)
-            btns.accepted.connect(dlg.accept)
-            dlg_layout.addWidget(btns)
+            dlg = CustomPopup(CustomPopupLevel.ERROR,f"Failed to send order: {str(e)}")
             dlg.exec()
 
 
@@ -171,7 +182,7 @@ class OrderUI(QWidget):
         self.orders_table.repaint()
         self.items_table.setRowCount(0)
 
-    def on_order_selected(self):
+    def _on_order_selected(self):
         selected = self.orders_table.selectedItems()
         if not selected:
             return
@@ -181,9 +192,9 @@ class OrderUI(QWidget):
             return
 
         items = self.order_product_service.get_order_products_by_order_id(order_id)
-        self.render_items(items.values())
+        self._render_items(items.values())
 
-    def render_items(self, items):
+    def _render_items(self, items):
         self.items_table.setRowCount(len(items))
         self.items_table.setSortingEnabled(False)
         self.items_table.clearContents()

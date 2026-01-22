@@ -34,15 +34,16 @@ class ProductRepository:
             if not hasattr(product, key) or getattr(product, key) != value:
                 return False
         return True
-    def save(self, product):
+    def save(self, p):
         with open(self.path, 'a') as file:
-            line = f"{product.productCode},{product.name},{product.category},{product.initialStock},{product.reorderPoint},{product.unitOfMeasure},{product.status}\n"
+            line = f"{p.productCode},{p.name},{p.category},{p.initialStock},{p.reorderPoint},{p.unitOfMeasure},{p.status},{p.maxStock}\n"
             file.write(line)
 
     def update(self, product):
         products = self.find_all()
         products[product.productCode] = product
         with open(self.path, 'w') as file:
+            file.write("productCode,name,category,initialStock,reorderPoint,unitOfMeasure,status,maxStock\n")
             for p in products.values():
                 line = f"{p.productCode},{p.name},{p.category},{p.initialStock},{p.reorderPoint},{p.unitOfMeasure},{p.status},{p.maxStock}\n"
                 file.write(line)

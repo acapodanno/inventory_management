@@ -3,7 +3,8 @@ from PySide6.QtWidgets import (
     QLineEdit, QComboBox, QPushButton, QLabel,
     QTableWidget, QTableWidgetItem
 )
-
+from gui.shared.custom_popup.custom_popup import CustomPopup
+from gui.shared.custom_popup.custom_popop_level import CustomPopupLevel
 class ProductUI(QWidget):
     def __init__(self, product_service, parent=None):
         super().__init__(parent)
@@ -82,7 +83,10 @@ class ProductUI(QWidget):
             if thr is not None and int(p.initialStock) > thr:
                 continue
             filtered.append(p)
-
+        if len(filtered) == 0:
+            dlg = CustomPopup(CustomPopupLevel.INFO,"No products found!")
+            dlg.exec()
+            
         self.render_table(filtered)
 
     def render_table(self, rows):
