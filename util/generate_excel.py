@@ -2,6 +2,7 @@ import xlwt
 
 
 def generate_excel(data, file_path):
+    """ Generate an Excel file from the provided data dictionary. """
     workbook = xlwt.Workbook()
     sheet_daily_report = workbook.add_sheet("daily_report")
     sheet_product_most_fulfilled = workbook.add_sheet("product_most_fulfilled")

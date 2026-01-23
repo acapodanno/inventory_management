@@ -10,6 +10,7 @@ from service.report_service import ReportService
 from util.generate_excel import generate_excel
 def main():
     setup_logging()
+    
     productService = ProductService(ProductRepository('dummy_data/products.csv'))
     orderService = OrderService(OrderRepository('dummy_data/orders.csv'))
     orderProductService = OrderProductService(OrderProductRepository('dummy_data/order_products.csv'))

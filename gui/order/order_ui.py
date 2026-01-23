@@ -11,6 +11,7 @@ import uuid
 from util.validate_date import validate_date
 from datetime import datetime
 class OrderUI(QWidget):
+    """UI component for managing orders."""
     def __init__(self, send_order, order_service, order_product_service, parent=None):
         super().__init__(parent)
         self.send_order = send_order
@@ -88,19 +89,22 @@ class OrderUI(QWidget):
         self.orders_table.itemSelectionChanged.connect(self._on_order_selected)
 
         self.reload_orders()
-        
+     
     def _add_empty_line(self):
+        """ Add an empty line to the order items table."""   
         r = self.lines_table.rowCount()
         self.lines_table.insertRow(r)
         self.lines_table.setItem(r, 0, QTableWidgetItem(""))  # productCode
         self.lines_table.setItem(r, 1, QTableWidgetItem("1"))  # quantity
-
+    
     def remove_selected_line(self):
+        """ Remove the selected line from the order items table."""
         r = self.lines_table.currentRow()
         if r >= 0:
             self.lines_table.removeRow(r)
-
+     
     def _read_lines(self):
+        """ Read product lines from the order items table."""   
         lines = []
         for r in range(self.lines_table.rowCount()):
             code_item = self.lines_table.item(r, 0)
@@ -123,8 +127,9 @@ class OrderUI(QWidget):
             lines.append({"productCode": code, "quantity": qty})
 
         return lines
-
+    
     def _on_send_order(self):
+        """ Handle the send order action."""
         customer_id = self.customer_input.text().strip()
         order_date = self.date_input.text().strip()
         priority = int(self.priority_input.value())
@@ -161,8 +166,9 @@ class OrderUI(QWidget):
             dlg = CustomPopup(CustomPopupLevel.ERROR,f"Failed to send order: {str(e)}")
             dlg.exec()
 
-
+    
     def reload_orders(self):
+        """ Reload and display all orders in the orders table."""
         self.date_input.setText("")
         self.customer_input.setText("")
         data = self.order_service.get_all_orders()
@@ -181,8 +187,9 @@ class OrderUI(QWidget):
         self.orders_table.viewport().update()
         self.orders_table.repaint()
         self.items_table.setRowCount(0)
-
+    
     def _on_order_selected(self):
+        """ Handle order selection to display its items."""
         selected = self.orders_table.selectedItems()
         if not selected:
             return
@@ -193,8 +200,9 @@ class OrderUI(QWidget):
 
         items = self.order_product_service.get_order_products_by_order_id(order_id)
         self._render_items(items.values())
-
+    
     def _render_items(self, items):
+        """ Render order items in the items table."""
         self.items_table.setRowCount(len(items))
         self.items_table.setSortingEnabled(False)
         self.items_table.clearContents()

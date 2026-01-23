@@ -1,10 +1,11 @@
 from model.product_model import ProductModel
 class ProductRepository:
-
+    """Repository layer for managing products in CSV storage."""
     def __init__(self, path):
         self.path = path
 
     def find_all(self):
+        """ Retrieve all products."""
         products = {}
         with open(self.path, 'r') as file:
             next(file)
@@ -25,21 +26,26 @@ class ProductRepository:
         return products
     
     def find_by_filter(self, **filters):
+        """ Retrieve products by filter criteria."""
         all_products = self.find_all()
-        filtered_products = {code: product for code, product in all_products.items() if self.match_filter(product, **filters)}
+        filtered_products = {code: product for code, product in all_products.items() if self._match_filter(product, **filters)}
         return filtered_products
     
-    def match_filter(self, product, **filters):
+    def _match_filter(self, product, **filters):
+        """ Helper method to match product against filters."""
         for key, value in filters.items():
             if not hasattr(product, key) or getattr(product, key) != value:
                 return False
         return True
+    
     def save(self, p):
+        """ Add a new product."""
         with open(self.path, 'a') as file:
             line = f"{p.productCode},{p.name},{p.category},{p.initialStock},{p.reorderPoint},{p.unitOfMeasure},{p.status},{p.maxStock}\n"
             file.write(line)
-
+    
     def update(self, product):
+        """ Update an existing product."""
         products = self.find_all()
         products[product.productCode] = product
         with open(self.path, 'w') as file:

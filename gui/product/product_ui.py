@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 from gui.shared.custom_popup.custom_popup import CustomPopup
 from gui.shared.custom_popup.custom_popop_level import CustomPopupLevel
 class ProductUI(QWidget):
+    """UI component for displaying and filtering products."""
     def __init__(self, product_service, parent=None):
         super().__init__(parent)
         self.product_service = product_service
@@ -47,13 +48,14 @@ class ProductUI(QWidget):
 
         self.products = {}
         self.reload_data()
-
+    
     def reload_data(self):
+        """ Reload product data from the service and update the UI."""
         self.products = self.product_service.get_all_products() 
         self._reload_categories()
         self.render_table(self.products.values())
-
     def _reload_categories(self):
+        """ Reload product categories for the filter dropdown."""
         cats = sorted({p.category for p in self.products.values()})
         self.category_combo.blockSignals(True)
         self.category_combo.clear()
@@ -61,8 +63,8 @@ class ProductUI(QWidget):
         for c in cats:
             self.category_combo.addItem(c)
         self.category_combo.blockSignals(False)
-
     def apply_filters(self):
+        """ Apply filters based on user input and update the table."""
         code = self.code_input.text().strip()
         cat = self.category_combo.currentText()
         thr_raw = self.stock_threshold.text().strip()
@@ -88,8 +90,9 @@ class ProductUI(QWidget):
             dlg.exec()
             
         self.render_table(filtered)
-
+    
     def render_table(self, rows):
+        """ Render the given product rows in the table."""
         self.table.setRowCount(len(rows))
         self.table.setSortingEnabled(False)
         self.table.clearContents()

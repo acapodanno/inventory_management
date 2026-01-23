@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt
 from util.generate_excel import generate_excel
 
 class ReportUI(QWidget):
+    """UI component for generating and displaying daily reports."""
     _header_title = "Daily Report"
     _btn_generate_excel_title = "Generate Excel Report"
     _btn_generate_report_title = "Generate today report"
@@ -54,8 +55,8 @@ class ReportUI(QWidget):
 
         self.generate_btn.clicked.connect(self._generate_report)
         self.generate_excel_btn.clicked.connect(self._generate_excel_report)
-
     def _generate_excel_report(self):
+        """ Generate and save the daily report as an Excel file."""
         report = self.report_service.generated_daily_report()
         generate_excel({
             "dailyReport": [report.numberOrders,
@@ -64,6 +65,7 @@ class ReportUI(QWidget):
             "productsMostFulfilled": report.productsMostFulfilled
         }, "daily_report.xls")
     def _generate_report(self):
+        """ Generate and display the daily report in the UI."""
         report = self.report_service.generated_daily_report()
         self.total_orders_lbl.setText(f"Total orders: {report.numberOrders}")
         self.completed_orders_lbl.setText(f"Completed: {report.numberOrderCompleted}")

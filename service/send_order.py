@@ -7,6 +7,7 @@ from constant.order_product_status import OrderProductStatus
 from constant.order_status import OrderStatus
 from constant.product_status import ProductStatus
 class SendOrder:
+    """Service layer for sending orders and processing product lines."""
     def __init__(self, order_service: OrderService, order_product_service: OrderProductService,product_service: ProductService):
         self.order_service = order_service
         self.order_product_service = order_product_service
@@ -14,6 +15,7 @@ class SendOrder:
         self.logger = logging.getLogger(__name__)
     
     def send_order(self, order, product_lines):
+        """ Process and send an order with its product lines."""
         self.logger.info(f"Processing order {order.orderId} with product lines: {product_lines}")
         order_products = []
         for line in product_lines:
@@ -23,8 +25,9 @@ class SendOrder:
             order_products.append(order_product)
         order.status = self._determinate_order_status_from_product_lines(order_products)
         self.order_service.add_order(order)
-
+    
     def _determinate_order_status_from_product_lines(self, order_products):
+        """ Determine overall order status based on product line statuses."""
         all_fulfilled = all(op.status == OrderProductStatus.FULFILLED for op in order_products)
         all_unfulfilled = all(op.status == OrderProductStatus.UNFULFILLED for op in order_products)
         if all_fulfilled:
@@ -33,8 +36,9 @@ class SendOrder:
             return OrderStatus.PENDING
         else:
             return OrderStatus.PARTIALLY_COMPLETED
-
+    
     def _process_product_line(self, productCode, quantity, orderId):
+        """ Process an individual product line within an order."""
         products = self.product_service.get_all_products()
         product = products.get(productCode)
         if not product:
@@ -74,6 +78,7 @@ class SendOrder:
         return order_product    
             
     def _reorder_stock_to_supplier(self, productCode, quantity,product):
+        """" Reorder stock for a product from the supplier. simulated action."""
         self.logger.info(f"Reordering {quantity} of product {productCode} from supplier.")
         product.status=ProductStatus.REORDERING
         self.product_service.update_product(product)

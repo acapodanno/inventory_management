@@ -58,3 +58,9 @@ timestamp,level,name,message
 2026-01-22 22:00:46,INFO,service.order_service,Fetching all orders
 2026-01-22 22:00:47,INFO,service.order_service,Fetching all orders
 2026-01-22 22:00:47,INFO,service.product_service,Fetching all products
+2026-01-23 21:21:18,INFO,service.product_service,Fetching all products
+2026-01-23 21:21:18,INFO,service.order_service,Fetching all orders
+2026-01-23 21:21:38,INFO,service.order_service,Fetching all orders
+2026-01-23 21:21:42,INFO,service.order_service,Fetching all orders
+2026-01-23 21:21:45,INFO,service.order_service,Fetching all orders
+2026-01-23 21:21:46,INFO,service.product_service,Fetching all products

@@ -3,13 +3,15 @@ from datetime import datetime
 from model.daily_report_model import DailyReportModel
 import logging
 class ReportService:
+    """Service layer for generating reports."""
     def __init__(self, order_service, product_service,order_product_service):
         self.order_service = order_service
         self.product_service = product_service
         self.order_product_service = order_product_service
         self.logger = logging.getLogger(__name__)
-
+    
     def generated_daily_report(self):
+        """ Generate daily report."""
         self.logger.info("Generating daily report.")
         orders = self.order_service.get_all_orders()
         products = self.product_service.get_all_products()
@@ -32,4 +34,5 @@ class ReportService:
         return report
     
     def _sum_order_for_status(self, orders, status):
+        """ Helper method to sum orders by status."""
         return sum(1 for order in orders if order.status == status)

@@ -8,6 +8,7 @@ from gui.report.report_ui import ReportUI
 import os
 from dotenv import load_dotenv
 class MainWindow(QMainWindow):
+    """ Main application window containing tabs for products, orders, and reports. """
     def __init__(self,product_service, order_service, send_order, order_product_service, report_service, parent=None):
         super().__init__()
         load_dotenv()
@@ -33,6 +34,7 @@ class MainWindow(QMainWindow):
         self.tabs.currentChanged.connect(self._on_tab_changed)
 
     def _on_tab_changed(self, index):
+        """ Handle tab change events to refresh data as needed."""
         if index == 0:
             self.product_ui.reload_data()
         elif index == 1:
@@ -41,11 +43,13 @@ class MainWindow(QMainWindow):
             self.report_ui.reset_ui()
 
     def _create_tab_widget(self, widget):
+        """ Create a tab widget containing the given widget. """
         tab = QWidget()
         layout = QVBoxLayout(tab)
         layout.addWidget(widget)
         return tab
     
     def _add_tab(self, widgets):
+        """ Add multiple tabs to the main tab widget."""
         for widget, title in widgets:
             self.tabs.addTab(widget, title)
