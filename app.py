@@ -10,7 +10,7 @@ from service.order_product_service import OrderProductService
 from repository.order_product_repository import OrderProductRepository
 from util.logging_config import setup_logging
 from service.report_service import ReportService   
-from util.csv_management import ensure_csv_file_exists
+from util.csv_management import ensure_csv_file_exists,ensure_directory_exists
 
 
 def main():
@@ -26,6 +26,7 @@ def main():
     w.show()
     sys.exit(app.exec())
 def _intiialize_cvs_files():
+    ensure_directory_exists('dummy_data')
     csv_headers = {
         'dummy_data/products.csv': ['productCode', 'name', 'category', 'initialStock', 'reorderPoint', 'unitOfMeasure', 'status', 'maxStock'],
         'dummy_data/orders.csv': ['orderId', 'orderDate', 'status', 'priority', 'userId'],
@@ -34,6 +35,6 @@ def _intiialize_cvs_files():
     }
     for file_path, headers in csv_headers.items():
         ensure_csv_file_exists(file_path, headers)
-        
+
 if __name__ == "__main__":
     main()

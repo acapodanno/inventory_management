@@ -7,3 +7,9 @@ def ensure_csv_file_exists(file_path, headers):
         with open(file_path, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(headers)
+            
+def ensure_directory_exists(directory):
+    """ Ensure that the specified directory exists. """
+    if not os.path.exists(directory):
+        os.makedirs(directory)            
+
