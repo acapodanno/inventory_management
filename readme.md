@@ -1,3 +1,5 @@
+Project Python for course AI Solution Architect
+
 Create a Virtual Enviroment:
 
 - python -m venv venv  
@@ -13,4 +15,5 @@ Install dependency:
 Start software:
 
 - python app.py
+
 
